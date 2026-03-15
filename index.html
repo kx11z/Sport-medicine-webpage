@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LHS Sports Medicine Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg-1:#06141a;
+  --bg-2:#0b2229;
+  --bg-3:#0f3134;
+  --card:rgba(255,255,255,0.07);
+  --card-border:rgba(57,255,179,0.18);
+  --accent:#39ffb3;
+  --accent-2:#67d8ff;
+  --text:#f5fffc;
+  --muted:rgba(255,255,255,0.78);
+  --shadow:0 0 30px rgba(57,255,179,0.12);
+}
+
+*{box-sizing:border-box;scroll-behavior:smooth;}
+
+html,body{margin:0;padding:0;overflow-x:hidden;}
+
+body{
+  font-family:'Inter',sans-serif;
+  color:var(--text);
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(103,216,255,0.14), transparent 24%),
+    radial-gradient(circle at 80% 15%, rgba(57,255,179,0.18), transparent 22%),
+    linear-gradient(160deg, var(--bg-1), var(--bg-2), var(--bg-3));
+  background-size:cover;
+  background-attachment:fixed;
+  position:relative;
+}
+
+body::before,
+body::after{
+  content:"";
+  position:fixed;
+  inset:auto;
+  width:420px;
+  height:420px;
+  border-radius:50%;
+  filter:blur(70px);
+  z-index:-2;
+  opacity:0.35;
+  pointer-events:none;
+}
+
+body::before{
+  top:-120px;
+  left:-100px;
+  background:rgba(57,255,179,0.22);
+  animation:floatBlob 15s ease-in-out infinite;
+}
+
+body::after{
+  right:-120px;
+  top:180px;
+  background:rgba(103,216,255,0.16);
+  animation:floatBlob 18s ease-in-out infinite reverse;
+}
+
+.grid-overlay{
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,1));
+  z-index:-3;
+  pointer-events:none;
+}
+
+.floating-particles{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  z-index:-1;
+  pointer-events:none;
+}
+
+.floating-particles span{
+  position:absolute;
+  display:block;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:rgba(57,255,179,0.32);
+  box-shadow:0 0 16px rgba(57,255,179,0.25);
+  animation:rise linear infinite;
+}
+
+.floating-particles span:nth-child(1){left:8%;animation-duration:17s;animation-delay:-3s;top:100%;}
+.floating-particles span:nth-child(2){left:18%;animation-duration:14s;animation-delay:-9s;top:100%;width:6px;height:6px;}
+.floating-particles span:nth-child(3){left:29%;animation-duration:18s;animation-delay:-7s;top:100%;}
+.floating-particles span:nth-child(4){left:45%;animation-duration:13s;animation-delay:-2s;top:100%;width:5px;height:5px;}
+.floating-particles span:nth-child(5){left:58%;animation-duration:16s;animation-delay:-11s;top:100%;}
+.floating-particles span:nth-child(6){left:71%;animation-duration:20s;animation-delay:-5s;top:100%;width:10px;height:10px;}
+.floating-particles span:nth-child(7){left:82%;animation-duration:15s;animation-delay:-8s;top:100%;}
+.floating-particles span:nth-child(8){left:91%;animation-duration:19s;animation-delay:-13s;top:100%;width:6px;height:6px;}
+
+section{scroll-margin-top:100px;}
+
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  backdrop-filter:blur(16px);
+  background:rgba(4,17,20,0.62);
+  border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.topbar-inner{
+  max-width:1150px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+  padding:14px 20px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:800;
+  letter-spacing:.4px;
+}
+
+.brand-badge{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg, rgba(57,255,179,0.24), rgba(103,216,255,0.18));
+  border:1px solid rgba(255,255,179,0.18);
+  box-shadow:var(--shadow);
+}
+
+.nav-links{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.nav-links a{
+  color:white;
+  text-decoration:none;
+  padding:10px 16px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.03);
+  transition:.28s ease;
+  font-size:.93rem;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+  transform:translateY(-2px);
+  background:var(--accent);
+  color:#03251a;
+  box-shadow:0 10px 24px rgba(57,255,179,0.24);
+}
+
+.hero{
+  max-width:1150px;
+  margin:0 auto;
+  padding:72px 20px 24px;
+  display:grid;
+  grid-template-columns:1.25fr .95fr;
+  gap:26px;
+  align-items:center;
+}
+
+.hero-card,
+.info-panel,
+.card,
+.member,
+.resource,
+.stat-box{
+  background:var(--card);
+  border:1px solid var(--card-border);
+  backdrop-filter:blur(16px);
+  box-shadow:var(--shadow);
+}
+
+.hero-card{
+  border-radius:28px;
+  padding:42px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(130deg, rgba(57,255,179,0.06), rgba(103,216,255,0.03), transparent 60%);
+  pointer-events:none;
+}
+
+.hero h1{
+  font-size:clamp(2.4rem, 5vw, 4.8rem);
+  line-height:1.02;
+  margin:0 0 14px;
+  letter-spacing:-1.5px;
+}
+
+.hero .sub{
+  font-size:1.08rem;
+  color:var(--muted);
+  line-height:1.75;
+  max-width:640px;
+}
+
+.glow-text{
+  color:var(--accent);
+  text-shadow:0 0 14px rgba(57,255,179,0.45);
+}
+
+.hero-buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-top:26px;
+}
+
+.hero-buttons a{
+  text-decoration:none;
+  padding:14px 20px;
+  border-radius:14px;
+  font-weight:700;
+  transition:.25s ease;
+}
+
+.btn-primary{
+  background:var(--accent);
+  color:#03261a;
+}
+
+.btn-secondary{
+  color:white;
+  border:1px solid rgba(255,255,255,0.14);
+  background:rgba(255,255,255,0.04);
+}
+
+.hero-buttons a:hover{
+  transform:translateY(-3px) scale(1.02);
+}
+
+.info-panel{
+  border-radius:28px;
+  padding:28px;
+}
+
+.info-panel h3{
+  margin-top:0;
+  font-size:1.35rem;
+}
+
+.meeting-card{
+  background:linear-gradient(145deg, rgba(57,255,179,0.15), rgba(103,216,255,0.07));
+  border:1px solid rgba(57,255,179,0.35);
+  border-radius:20px;
+  padding:22px;
+}
+
+.meeting-card p{margin:10px 0;color:var(--muted);}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-top:18px;
+}
+
+.stat-box{
+  border-radius:18px;
+  padding:18px 16px;
+  text-align:center;
+}
+
+.stat-box h4{margin:0;font-size:1.6rem;color:var(--accent);}
+.stat-box p{margin:6px 0 0;opacity:.82;font-size:.92rem;}
+
+.container{
+  max-width:1150px;
+  margin:auto;
+  padding:18px 20px 70px;
+}
+
+.section-title{
+  font-size:2rem;
+  margin:0 0 10px;
+}
+
+.section-sub{
+  color:var(--muted);
+  margin:0 0 24px;
+  line-height:1.7;
+}
+
+.card{
+  border-radius:24px;
+  padding:34px;
+  margin-bottom:28px;
+  transition:transform .35s ease, box-shadow .35s ease, border-color .35s ease, opacity .6s ease;
+}
+
+.reveal{
+  opacity:0;
+  transform:translateY(34px);
+}
+
+.reveal.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.card:hover{
+  transform:translateY(-5px);
+  border-color:rgba(57,255,179,0.38);
+  box-shadow:0 0 34px rgba(57,255,179,0.18);
+}
+
+.split-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+
+ul{
+  line-height:1.95;
+  font-size:1.03rem;
+  padding-left:20px;
+}
+
+h2,h3{letter-spacing:-0.3px;}
+
+.team-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:22px;
+}
+
+.member{
+  border-radius:22px;
+  padding:24px;
+  text-align:center;
+  transition:.3s ease;
+  position:relative;
+  overflow:hidden;
+}
+
+.member::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg, rgba(57,255,179,0.08), transparent 55%);
+  opacity:0;
+  transition:.28s ease;
+}
+
+.member:hover::before{opacity:1;}
+
+.member:hover{
+  transform:translateY(-8px) rotate(-.5deg);
+}
+
+.profile{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  object-fit:cover;
+  border:4px solid var(--accent);
+  margin:0 auto 14px;
+  display:block;
+  transition:.35s ease;
+  box-shadow:0 0 20px rgba(57,255,179,0.18);
+}
+
+.member:hover .profile{
+  transform:scale(1.06);
+}
+
+.member h3{margin:10px 0 6px;}
+.member p{margin:4px 0;color:var(--muted);}
+
+.resources-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.resource{
+  border-radius:16px;
+  padding:18px;
+  transition:.28s ease;
+}
+
+.resource:hover{
+  background:rgba(57,255,179,0.1);
+  transform:translateY(-4px) translateX(2px);
+}
+
+.resource a{
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:700;
+  line-height:1.55;
+}
+
+.resource small{display:block;margin-top:8px;color:var(--muted);}
+
+.contact-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+
+.contact-box p{
+  margin:14px 0;
+  color:var(--muted);
+  line-height:1.75;
+}
+
+.contact-box a{color:var(--accent);text-decoration:none;font-weight:600;}
+.contact-box a:hover{text-decoration:underline;}
+
+footer{
+  text-align:center;
+  opacity:0.72;
+  padding:34px 20px 42px;
+  font-size:.92rem;
+}
+
+.scroll-indicator{
+  position:fixed;
+  top:0;
+  left:0;
+  width:0%;
+  height:4px;
+  z-index:1100;
+  background:linear-gradient(90deg, var(--accent), var(--accent-2));
+  box-shadow:0 0 16px rgba(57,255,179,0.6);
+}
+
+@keyframes rise{
+  from{transform:translateY(0) scale(1);opacity:0;}
+  10%{opacity:1;}
+  to{transform:translateY(-120vh) scale(1.8);opacity:0;}
+}
+
+@keyframes floatBlob{
+  0%,100%{transform:translate(0,0) scale(1);}
+  50%{transform:translate(30px, 35px) scale(1.08);}
+}
+
+@media (max-width: 900px){
+  .hero,
+  .split-grid,
+  .resources-grid,
+  .contact-grid{
+    grid-template-columns:1fr;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+}
+
+@media (max-width: 720px){
+  .topbar-inner{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .nav-links{
+    width:100%;
+  }
+
+  .nav-links a{
+    font-size:.86rem;
+    padding:9px 13px;
+  }
+
+  .hero{
+    padding-top:42px;
+  }
+
+  .hero-card,
+  .info-panel,
+  .card{
+    padding:24px;
+    border-radius:20px;
+  }
+
+  .hero h1{
+    font-size:2.4rem;
+  }
+}
+</style>
+</head>
+<body>
+<div class="scroll-indicator" id="scrollIndicator"></div>
+<div class="grid-overlay"></div>
+<div class="floating-particles">
+  <span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span>
+</div>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-badge">🏥</div>
+      <div>LHS Sports Medicine Club</div>
+    </div>
+
+    <div class="nav-links">
+      <a href="#about" class="nav-item active">About</a>
+      <a href="#team" class="nav-item">Team</a>
+      <a href="#resources" class="nav-item">Resources</a>
+      <a href="#contact" class="nav-item">Contact</a>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-card reveal visible">
+    <p class="glow-text" style="font-weight:700; text-transform:uppercase; letter-spacing:1.5px; margin:0 0 12px;">Explore • Learn • Prevent • Recover</p>
+    <h1>Where <span class="glow-text">sports</span>, <span class="glow-text">science</span>, and <span class="glow-text">health</span> connect.</h1>
+    <p class="sub">Exploring injury prevention, athletic performance, rehabilitation, and the science behind movement through interactive meetings, case studies, games, and guest speakers.</p>
+
+    <div class="hero-buttons">
+      <a class="btn-primary" href="#resources">View Resources</a>
+      <a class="btn-secondary" href="#contact">Contact the Club</a>
+    </div>
+  </div>
+
+  <div class="info-panel reveal visible">
+    <h3>Upcoming Meeting</h3>
+    <div class="meeting-card">
+      <p><strong>Date:</strong> March 12</p>
+      <p><strong>Topic:</strong> Famous injury case study + rehab</p>
+      <p><strong>Activity:</strong> Slides + discussion</p>
+      <p><strong>Location:</strong> Dr. Agarwal's Room (022)</p>
+      <p><strong>Time:</strong> Thursday Brunch</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat-box">
+        <h4>18</h4>
+        <p>Points to stay active</p>
+      </div>
+      <div class="stat-box">
+        <h4>22</h4>
+        <p>Points for new seniors' cord</p>
+      </div>
+      <div class="stat-box">
+        <h4>1</h4>
+        <p>Point per meeting or weekly question</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <section id="about" class="reveal card">
+    <h2 class="section-title">About Our Club</h2>
+    <p class="section-sub">A branch of medicine focused on athletic injuries, prevention, diagnosis, treatment, performance, and rehabilitation.</p>
+
+    <div class="split-grid">
+      <div>
+        <h3>Our Purpose</h3>
+        <ul>
+          <li>Educate members about the broad field of sports medicine</li>
+          <li>Encourage personal health, injury awareness, and wellness</li>
+          <li>Provide opportunities to expand knowledge through interactive learning</li>
+        </ul>
+      </div>
+
+      <div>
+        <h3>Typical Meeting</h3>
+        <ul>
+          <li>Informational slideshow presentation</li>
+          <li>Interactive activity or mini case study</li>
+          <li>Kahoot or Gimkit review game</li>
+          <li>Guest speaker or athlete/rehab discussion</li>
+          <li>Other fun hands-on activities</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="team" class="reveal card">
+    <h2 class="section-title">Meet the Team</h2>
+    <p class="section-sub">The students helping lead and grow the club this year.</p>
+
+    <div class="team-grid">
+      <div class="member">
+        <img class="profile" src="https://i.postimg.cc/1RKqvVQG/Screenshot_2026_03_09_at_11_43_11_AM.png" alt="Michael">
+        <h3>President</h3>
+        <p><strong>Michael</strong></p>
+        <p>Leads the club and organizes everything.</p>
+      </div>
+
+      <div class="member">
+        <img class="profile" src="https://i.postimg.cc/2jxZ0LDv/Screenshot_2026_03_09_at_11_43_16_AM.png" alt="Derrick">
+        <h3>Vice President</h3>
+        <p><strong>Derrick</strong></p>
+        <p>Coordinates projects and partnerships.</p>
+      </div>
+
+      <div class="member">
+        <img class="profile" src="https://i.postimg.cc/qBG316Ty/Screenshot_2026_03_09_at_11_43_27_AM.png" alt="Keyi">
+        <h3>Secretary</h3>
+        <p><strong>Keyi</strong></p>
+        <p>Organizes member info and sends updates.</p>
+      </div>
+
+      <div class="member">
+        <img class="profile" src="https://i.postimg.cc/66hvM4XZ/Screenshot_2026_03_09_at_11_43_31_AM.png" alt="Sush">
+        <h3>Treasurer</h3>
+        <p><strong>Sush</strong></p>
+        <p>Manages finances and transactions.</p>
+      </div>
+
+      <div class="member">
+        <img class="profile" src="https://i.postimg.cc/zDkgxHrT/Screenshot_2026_03_09_at_11_43_35_AM.png" alt="Chloe">
+        <h3>Public Relations</h3>
+        <p><strong>Chloe</strong></p>
+        <p>Promotes the club through social media and outreach.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="resources" class="reveal card">
+    <h2 class="section-title">Club Slides & Learning Resources</h2>
+    <p class="section-sub">Click any topic to open the presentation.</p>
+
+    <div class="resources-grid">
+      <div class="resource"><a href="https://docs.google.com/presentation/d/1xXVnR_vK4jxGkpR5dhRdW2Oo62vhJvXCiTEngsI03LA/edit?usp=drive_web&ouid=113446560633280408937" target="_blank">2026/2/26 – Unit 3: Nutrition Review</a><small>Recent club topic</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/1QXmbSa0Ir2Mufw7KcfdSOn0Qa3cVi2YAbEUrl0_qWEo/edit" target="_blank">2026/2/12 – Unit 3: Hydration / Vitamins + IV Therapy</a><small>Nutrition and recovery</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/17RkwTzxoZrGJH8xhfE6pPLk_Ohbws4P9U0Eq508WrXI/edit" target="_blank">2026/2/5 – Unit 3: Lipids & Ketosis</a><small>Fuel and metabolism</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/1xKwngYl8Pdaca_d0bNmbCOQU3usS292_Eo-_ds7vnMA/edit?slide=id.g2fd2ce8234f_0_2500#slide=id.g2fd2ce8234f_0_2500" target="_blank">2026/1/15 – Unit 3: Protein</a><small>Muscle recovery and nutrition</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/1SOuFUk7gkij0Qaja1b6bEpFhLzoa2XlTmmlPWbjYzGs/edit?usp=drive_web&ouid=113446560633280408937" target="_blank">2026/1/8 – Unit 3: Calories & Carbohydrates</a><small>Energy systems basics</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/1IJEO0FGZ54xjc9D5Afa9WivjQ2_H0CV-XHBWWUEekTw/edit" target="_blank">2025/12/04 – Unit 2: Taping</a><small>Support and stabilization</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/1ErCE9hQv_SjHckYijp6tSzlUSXAG0834xa322g5ryDo/edit" target="_blank">2025/11/20 – Unit 2: Thyroid</a><small>Body systems topic</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/1jTUgR8gI3DeaFMKNqIuVRqKhP35OSz0Jaw2ijcA0QkM/edit" target="_blank">2025/11/13 – Unit 2: Knee</a><small>Injury focus</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/1R3WIOZDxfrmdWyVvtlCO-JBOA4waoAWHANUO-Yje_JQ/edit" target="_blank">2025/11/06 – Unit 2: Head, Neck, and Spine</a><small>Critical injury review</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/1m4evbTqwo-q5rNpegCQnZZPOoKA4822L3R1shgJT-fM/edit" target="_blank">2025/10/30 – Unit 2: Shoulder Injuries</a><small>Joint injury overview</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/1vnlyeiTo7XU2TUen0T4Zd3D5edgv1IqlmaRUan02rl4/edit" target="_blank">2025/10/23 – Unit 1: Anatomy & Physiology Review</a><small>Foundational review</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/1ME8ZcMWRPd75nPxtERTiHBvG-eXDG3XF75YCI2gT76M/edit" target="_blank">2025/10/16 – Unit 1: Muscular System</a><small>Body structure focus</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/1pG2ZDm4HnmgTmGhICaqna3lsdafEReUohFQulnMDs_w/edit" target="_blank">2025/10/02 – Unit 1: Nervous System</a><small>Control and signaling</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/1dtrBqrKBDwCvjb9LKwdjyJQzH1GSdwA9dXnU9gyMAes/edit" target="_blank">2025/09/25 – Unit 1: Tendons and Ligaments</a><small>Connective tissue overview</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/184MIxV6mu_oY4wAnRbdJ1CBMFLweq75FpifZeOrR9LQ/edit?usp=drive_web&ouid=113446560633280408937" target="_blank">2025/09/18 – Unit 1: Cardiovascular System</a><small>System review</small></div>
+      <div class="resource"><a href="https://docs.google.com/presentation/d/1yOjTpshkKrePte2P7cS-hv7Y56WeWo2Ztls0TqNzyw8/edit" target="_blank">2025/09/11 – Unit 0: Intro Meeting</a><small>Club introduction</small></div>
+    </div>
+  </section>
+
+  <section id="contact" class="reveal card">
+    <h2 class="section-title">Contact Us</h2>
+    <p class="section-sub">Stay connected with meetings, updates, and club information.</p>
+
+    <div class="contact-grid">
+      <div class="contact-box">
+        <p><strong>Email:</strong> sportsmedicineofficers@gmail.com</p>
+        <p><strong>Meetings:</strong> Thursdays at Brunch</p>
+        <p><strong>Location:</strong> Dr. Agarwal's Room (022)</p>
+      </div>
+
+      <div class="contact-box">
+        <p><strong>Instagram:</strong> <a href="https://www.instagram.com/lhs_sportsmedicine" target="_blank">@lhs_sportsmedicine</a></p>
+        <p><strong>Points:</strong> <a href="https://docs.google.com/spreadsheets/d/1IRguh9XTJCXQyidtmNXg4p_WjVd9fI3E_iRPZ0q3ylY/edit?gid=0#gid=0" target="_blank">Member Points Spreadsheet</a></p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  © Sports Medicine Club
+</footer>
+
+<script>
+const revealItems = document.querySelectorAll('.reveal');
+const navItems = document.querySelectorAll('.nav-item');
+const sections = document.querySelectorAll('section[id]');
+const scrollIndicator = document.getElementById('scrollIndicator');
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.14 });
+
+revealItems.forEach(item => revealObserver.observe(item));
+
+window.addEventListener('scroll', () => {
+  const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  const scrollPercent = (scrollTop / scrollHeight) * 100;
+  scrollIndicator.style.width = scrollPercent + '%';
+
+  let current = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 140;
+    if (scrollTop >= sectionTop) current = section.getAttribute('id');
+  });
+
+  navItems.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>
